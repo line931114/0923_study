@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+       
+       <bean id="profiler" class="spring.sts.study.aop.Profiler"/>
+       
+       <aop:config>
+       	<aop:aspect id="traceAspect" ref="profiler">
+       		<aop:pointcut id="publicMethod" expression="execution(public * spring.sts.study..*(..))"/>
+       		<aop:around pointcut-ref = "publicMethod" method="trace"/>
+       	</aop:aspect>
+       </aop:config>
+       
+       <bean id ="writeArticleService"
+       	class="spring.sts.study.board.WriteArticleServiceImpl">
+       		<constructor-arg>
+       			<ref bean="articleDao" />
+       		</constructor-arg>
+       	</bean>
+       
+       <bean id="articleDao" class="spring.sts.study.board.MemoryArticleDao"></bean>
+       <bean id="memberService" class="spring.sts.study.member.MemberServiceImpl"/>
+       
+   
+       </beans> 
